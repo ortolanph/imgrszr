@@ -10,8 +10,8 @@ A command-line tool for resizing images and creating maskable icons.
 
 ## Installation
 ```bash
-git clone https://github.com/yourusername/image-resizer.git
-cd image-resizer
+git clone https://github.com/ortolanph/imgrszr.git
+cd imgrszr
 go mod tidy
 ```
 
@@ -20,11 +20,6 @@ go mod tidy
 ### Resize Image
 ```bash
 go run cmd/image-resizer/main.go resize -input input.jpg -output output.jpg -width 300 -height 200
-```
-
-### Create Maskable Icon
-```bash
-go run cmd/image-resizer/main.go maskable -input original_icon.png -output maskable_icon.png [-size 512]
 ```
 
 ## Build

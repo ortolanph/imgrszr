@@ -1,57 +1,40 @@
 package resizer
 
 import (
-	"fmt"
 	"image"
-	"image/draw"
+	_ "image/gif"
 	"image/jpeg"
-	"image/png"
+	_ "image/jpeg"
+	_ "image/png"
 	"os"
-	"path/filepath"
-	"strings"
+
+	"github.com/nfnt/resize"
 )
 
 // ResizeImage resizes an image to the specified width and height
-func ResizeImage(inputPath string, outputPath string, width, height int) error {
-	// Open the source image
-	srcFile, err := os.Open(inputPath)
+func ResizeImage(inputPath string, outputPath string, width uint, height uint) error {
+	file, err := os.Open(inputPath)
 	if err != nil {
-		return fmt.Errorf("error opening source image: %v", err)
+		panic(err)
 	}
-	defer srcFile.Close()
+	defer file.Close()
 
-	// Decode the image
-	src, _, err := image.Decode(srcFile)
+	img, _, err := image.Decode(file)
 	if err != nil {
-		return fmt.Errorf("error decoding image: %v", err)
+		panic(err)
 	}
 
-	// Create a new resized image
-	dst := image.NewRGBA(image.Rect(0, 0, width, height))
+	resizedImg := resize.Resize(width, height, img, resize.Lanczos3) // Lanczos3 is a good interpolation for upscaling
 
-	// Scale and draw the source image to the destination
-	draw.NearestNeighbor.Scale(dst, dst.Bounds(), src, src.Bounds(), draw.Over, nil)
-
-	// Create output file
-	outFile, err := os.Create(outputPath)
+	outputFile, err := os.Create(outputPath)
 	if err != nil {
-		return fmt.Errorf("error creating output file: %v", err)
+		panic(err)
 	}
-	defer outFile.Close()
+	defer outputFile.Close()
 
-	// Encode and save the resized image
-	ext := strings.ToLower(filepath.Ext(outputPath))
-	switch ext {
-	case ".png":
-		err = png.Encode(outFile, dst)
-	case ".jpg", ".jpeg":
-		err = jpeg.Encode(outFile, dst, nil)
-	default:
-		return fmt.Errorf("unsupported file format: %s", ext)
-	}
-
+	err = jpeg.Encode(outputFile, resizedImg, nil)
 	if err != nil {
-		return fmt.Errorf("error encoding image: %v", err)
+		panic(err)
 	}
 
 	return nil
