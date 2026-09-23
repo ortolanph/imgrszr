@@ -7,17 +7,11 @@ import (
 	"image/jpeg"
 	_ "image/png"
 	"os"
-	"fmt"
 
 	"github.com/nfnt/resize"
 )
 
 func Maskable(inputPath string, outputPath string, width uint, height uint) error {
-    fmt.Println(inputPath)
-    fmt.Println(outputPath)
-    fmt.Println(width)
-    fmt.Println(height)
-
 	file, err := os.Open(inputPath)
 	if err != nil {
 		panic(err)
