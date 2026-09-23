@@ -55,11 +55,11 @@ func main() {
 			os.Exit(1)
 		}
 
-		err := maskable.Maskable(*inputPath, *outputPath, *width, *height)
+		err := maskable.Maskable(*maskInputPath, *maskOutputPath, *maskWidth, *maskHeight)
 		if err != nil {
 			log.Fatalf("Error resizing image: %v", err)
 		}
-		fmt.Printf("Image resized and saved to %s\n", *outputPath)
+		fmt.Printf("Image resized and saved to %s\n", *maskOutputPath)
 
 	default:
 		fmt.Println("Expected 'resize' or 'mask' subcommands")
